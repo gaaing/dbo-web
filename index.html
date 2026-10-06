@@ -206,33 +206,58 @@
   height: 100%;
   border-radius: 42px / 36px;
   overflow: hidden;
-  background: #000;
+  background: var(--tv-screen-glass, #0b111a);
   transform: translateZ(0);
+  /* 恢复文字内容绝对水平垂直居中 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0 0 55px rgba(0, 0, 0, 0.98),
+    inset 0 4px 8px rgba(255, 255, 255, 0.32),
+    0 0 0 4px #040506;
 }
 
+/* 恢复原本经典显像管大弧度反光层 */
+.tv-screen-reflection {
+  position: absolute;
+  top: 3%;
+  left: 7%;
+  width: 86%;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.02) 60%, transparent 100%);
+  border-radius: 50% 50% 45% 45%;
+  filter: blur(2px);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 媒体标签充满屏幕 */
 .tv-screen-glass video,
 .tv-screen-glass img,
 .tv-screen-glass iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  z-index: 1;
 }
 
+/* 表面扫描线、曲面暗角与微颤呼吸遮罩 */
 .tv-screen-glass::after {
-  content: " ";
+  content: "";
   display: block;
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
   pointer-events: none;
+  z-index: 11;
   background: 
     linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-    radial-gradient(ellipse at 50% 48%, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0.5) 75%, rgba(0,0,0,0.92) 100%),
-    radial-gradient(ellipse at 50% 18%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 60%);
-  background-size: 100% 4px, 100% 100%, 100% 100%;
-  box-shadow: 
-    inset 0 0 35px rgba(0, 0, 0, 0.85),
-    inset 0 0 80px rgba(0, 0, 0, 0.6);
+    radial-gradient(ellipse at 50% 48%, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.45) 75%, rgba(0,0,0,0.85) 100%);
+  background-size: 100% 4px, 100% 100%;
   animation: crtFlicker 0.15s infinite;
 }
 
