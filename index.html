@@ -718,6 +718,22 @@
 
     let currentLang = detectUserLanguage();
 
+// 语言检测函数：优先级 = 本地存储 > 浏览器系统语言 > 默认简体中文
+    function detectInitialLang() {
+      try {
+        const saved = localStorage.getItem('dbo_user_lang');
+        if (saved && (i18n[saved] || I18N[saved])) return saved;
+      } catch (e) {}
+
+      const sys = (navigator.language || navigator.userLanguage || 'zh-CN').toLowerCase();
+      if (sys.startsWith('zh-tw') || sys.startsWith('zh-hk')) return 'zh-TW';
+      if (sys.startsWith('zh')) return 'zh-CN';
+      if (sys.startsWith('es')) return 'es';
+      if (sys.startsWith('pt')) return 'pt';
+      if (sys.startsWith('ja')) return 'ja';
+      return 'en';
+    }
+
     function changeLanguage(lang, isManual = false) {
       currentLang = lang;
       if (isManual) {
@@ -725,13 +741,24 @@
       }
 
       const selectElem = document.getElementById('home-lang-switch');
-      if (selectElem) selectElem.value = lang;
+      if (selectElem && selectElem.value !== lang) {
+        selectElem.value = lang;
+      }
 
       renderNav();
     }
 
     function renderNav() {
-      const dict = i18n[currentLang] || i18n['en'];
+      // 兼顾大写 I18N 和小写 i18n
+      const dictSource = (typeof i18n !== 'undefined' ? i18n : (typeof I18N !== 'undefined' ? I18N : {}));
+      const dict = dictSource[currentLang] || dictSource['zh-CN'] || dictSource['en'] || {
+        download: "下载游戏",
+        downloading: "正在准备下载...",
+        gm_panel: "GM控制台",
+        auth: "登录 / 注册",
+        logout: "登出 ({user})"
+      };
+
       let token = null, user = null, role = null;
       try {
         token = localStorage.getItem('dbo_token');
@@ -740,18 +767,20 @@
       } catch (e) {}
 
       const slot = document.getElementById('nav-btn-slot');
+      if (!slot) return;
 
       let html = '';
-      html += `<a href="#" class="btn-action btn-download" onclick="alert('${dict.downloading}'); return false;">${dict.download}</a>`;
+      html += `<a href="#" class="btn-action btn-download" onclick="alert('${dict.downloading || ''}'); return false;">${dict.download || '下载游戏'}</a>`;
 
       if (token && user) {
         if (role === 'GM') {
-          html += `<a href="login.html" class="btn-action">${dict.gm_panel}</a>`;
+          html += `<a href="login.html" class="btn-action">${dict.gm_panel || 'GM控制台'}</a>`;
         }
-        const logoutText = dict.logout.replace('{user}', user);
+        const rawLogout = dict.logout || '登出 ({user})';
+        const logoutText = rawLogout.replace('{user}', user);
         html += `<button class="btn-action btn-logout" onclick="logout()">${logoutText}</button>`;
       } else {
-        html += `<a href="login.html" class="btn-action">${dict.auth}</a>`;
+        html += `<a href="login.html" class="btn-action">${dict.auth || '登录 / 注册'}</a>`;
       }
 
       slot.innerHTML = html;
@@ -767,7 +796,9 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      changeLanguage(currentLang, false);
+      // 启动时优先执行检测并设置
+      const initLang = detectInitialLang();
+      changeLanguage(initLang, false);
     });
   </script>
 </body>
