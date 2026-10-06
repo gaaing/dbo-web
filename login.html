@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DragonBall OFFLINE — ACCOUNT PORTAL</title>
+  <!-- 网站 Favicon 图标 -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
+  <link rel="shortcut icon" href="favicon.ico?v=2">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&family=Noto+Sans+SC:wght@700;900&display=swap');
+
+    :root {
+      --db-fest-yellow: #ffcc00;
+      --db-card-bg: #ffffff;
+      --db-orange: #ff5400;
+      --db-tag-yellow: #ffbb00;
+      --db-border-dark: #1a1a1a;
+      --db-input-bg: #fffbf0;
+      --db-text-dark: #1e1e1e;
+      --db-cyan-glow: #6be5ff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--db-fest-yellow);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.35) 0%, transparent 25%),
+        radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(3px 3px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 100% 100%, 100% 100%, 120px 120px, 160px 160px, 140px 140px;
+      font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 16px;
+      color: var(--db-text-dark);
+      user-select: none;
+      position: relative;
+    }
+
+    .cyan-orb {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #e0f9ff 0%, var(--db-cyan-glow) 55%, #1ba8cc 100%);
+      box-shadow: 0 4px 15px rgba(27, 168, 204, 0.45);
+      border: 2px solid rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      z-index: 100;
+    }
+    .cyan-orb::after {
+      content: "";
+      width: 14px;
+      height: 2px;
+      background: #0d4b5c;
+      box-shadow: 0 -4px 0 #0d4b5c, 0 4px 0 #0d4b5c;
+    }
+
+    .fest-container {
+      width: 100%;
+      max-width: 580px;
+      background: var(--db-card-bg);
+      border: 3.5px solid var(--db-border-dark);
+      border-radius: 28px;
+      padding: 30px 24px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+    }
+
+    .fest-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 12px;
+    }
+
+    .fest-title-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fest-brand-logo {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .fest-tag-badge {
+      background: var(--db-tag-yellow);
+      color: #000;
+      font-size: 13px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .fest-title-text {
+      font-size: 16px;
+      font-weight: 900;
+      color: #111;
+    }
+
+    .lang-selector {
+      background: #f7f7f7;
+      border: 1.5px solid #dcdcdc;
+      color: #333;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 8px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .tab-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #f3f3f3;
+      padding: 4px;
+      border-radius: 12px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #666;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 8px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: #000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .form-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #444;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-group label::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--db-orange);
+    }
+
+    .fest-input {
+      width: 100%;
+      background: var(--db-input-bg);
+      border: 1.5px solid #e8dec3;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #111;
+      font-size: 13px;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .fest-input:focus {
+      background: #fff;
+      border-color: var(--db-orange);
+    }
+
+    .type-radio-wrap {
+      display: flex;
+      gap: 20px;
+      padding: 2px 0;
+    }
+
+    .type-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .btn-fest-orange {
+      width: 100%;
+      padding: 12px 18px;
+      background: linear-gradient(180deg, #ff6a1a 0%, #e64200 100%);
+      border: 2px solid #1a1a1a;
+      border-radius: 50px;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #1a1a1a;
+      transition: all 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-fest-orange:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+    .btn-fest-orange:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #1a1a1a;
+    }
+
+    .toast-box {
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: none;
+      word-break: break-all;
+    }
+    .toast-box.error {
+      background: #ffebeb;
+      border: 1.5px solid #ff4d4f;
+      color: #d92729;
+      display: block;
+    }
+    .toast-box.success {
+      background: #eafff3;
+      border: 1.5px solid #20c968;
+      color: #0e8540;
+      display: block;
+    }
+
+    /* GM 专属控制面板视图 */
+    .gm-view {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .gm-stats-box {
+      display: flex;
+      justify-content: space-around;
+      background: #fff8e8;
+      border: 1.5px solid #ffd880;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* 账号列表表格 */
+    .acc-table-wrap {
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1.5px solid #eee;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+    .acc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      text-align: left;
+    }
+    .acc-table th {
+      position: sticky;
+      top: 0;
+      background: #eee;
+      padding: 6px 8px;
+      font-weight: 800;
+      color: #444;
+      z-index: 2;
+    }
+    .acc-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #f0f0f0;
+      font-weight: 700;
+    }
+    .badge-banned {
+      background: #ff4d4f;
+      color: #fff;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .badge-active {
+      background: #20c968;
+      color: #fff;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    /* 表格翻页器 */
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 2px 0;
+      font-size: 11px;
+      font-weight: 800;
+      color: #555;
+    }
+    .page-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-page {
+      background: #f0f0f0;
+      border: 1.5px solid #ccc;
+      color: #222;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-page:hover:not(:disabled) {
+      background: #e2e2e2;
+      border-color: #999;
+    }
+    .btn-page:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .gm-btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    .btn-ban {
+      background: linear-gradient(180deg, #ff4747 0%, #d61818 100%);
+      border: 1.5px solid #1a1a1a;
+      box-shadow: 0 3px 0 #1a1a1a;
+      color: #fff;
+      padding: 8px 0;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .btn-del {
+      background: linear-gradient(180deg, #333 0%, #111 100%);
+      border: 1.5px solid #000;
+      box-shadow: 0 3px 0 #000;
+      color: #fff;
+      padding: 8px 0;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .btn-unban {
+      background: linear-gradient(180deg, #28a745 0%, #198754 100%);
+      border: 1.5px solid #1a1a1a;
+      box-shadow: 0 3px 0 #1a1a1a;
+      color: #fff;
+      padding: 8px 0;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* =======================================================
+       移动端响应式适配
+       ======================================================= */
+    @media (max-width: 600px) {
+      body {
+        padding: 16px 10px;
+      }
+      .cyan-orb {
+        top: 14px;
+        right: 14px;
+        width: 36px;
+        height: 36px;
+      }
+      .cyan-orb::after {
+        width: 11px;
+      }
+      .fest-container {
+        padding: 22px 16px;
+        border-radius: 20px;
+        gap: 14px;
+      }
+      .fest-header {
+        padding-bottom: 10px;
+      }
+      .fest-title-text {
+        font-size: 14px;
+      }
+      .fest-brand-logo {
+        width: 24px;
+        height: 24px;
+      }
+      .type-radio-wrap {
+        gap: 14px;
+      }
+      .gm-btn-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .gm-btn-row button {
+        padding: 10px 0;
+        font-size: 12px;
+      }
+      .acc-table th, .acc-table td {
+        padding: 5px 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="cyan-orb" title="返回主页"></a>
+
+  <div class="fest-container">
+    <div class="fest-header">
+      <div class="fest-title-box">
+        <img src="favicon.ico?v=2" class="fest-brand-logo" alt="Logo" onerror="this.style.display='none'">
+        <span class="fest-tag-badge">DBO</span>
+        <span class="fest-title-text" id="ui-title">DragonBall OFFLINE</span>
+      </div>
+      <select class="lang-selector" id="lang-switch" onchange="changeLanguage(this.value, true)">
+        <option value="zh-CN">简体中文</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="pt">Português</option>
+        <option value="ja">日本語</option>
+      </select>
+    </div>
+
+    <!-- 用户注册/登录面板 -->
+    <div id="auth-section">
+      <div class="tab-wrap">
+        <button class="tab-btn active" id="tab-reg-btn" type="button" onclick="switchTab('register')">注册新账号</button>
+        <button class="tab-btn" id="tab-log-btn" type="button" onclick="switchTab('login')">登录</button>
+      </div>
+
+      <div class="form-col" style="margin-top: 14px;">
+        <div class="form-group">
+          <label id="lbl-username">用户名</label>
+          <input type="text" id="username" class="fest-input" placeholder="输入账号名称...">
+        </div>
+
+        <div class="form-group">
+          <label id="lbl-password">密码</label>
+          <input type="password" id="password" class="fest-input" placeholder="输入密码...">
+        </div>
+
+        <div class="form-group" id="row-account-type">
+          <label id="lbl-type">身份类型</label>
+          <div class="type-radio-wrap">
+            <label class="type-label">
+              <input type="radio" name="acc_type" value="PLAYER" checked onchange="toggleGmKeyField(false)">
+              <span id="lbl-type-player">普通玩家</span>
+            </label>
+            <label class="type-label">
+              <input type="radio" name="acc_type" value="GM" onchange="toggleGmKeyField(true)">
+              <span id="lbl-type-gm" style="color: var(--db-orange);">管理员 (GM)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" id="row-gm-secret" style="display: none;">
+          <label id="lbl-gm-secret" style="color: var(--db-orange);">GM 一次性激活口令</label>
+          <input type="password" id="gm_secret" class="fest-input" placeholder="输入一次性口令..." style="border-color: var(--db-orange);">
+        </div>
+
+        <div class="form-group">
+          <label id="lbl-device">设备安全指纹 (自动匹配)</label>
+          <input type="text" id="device_id" class="fest-input" readonly style="opacity: 0.6; cursor: not-allowed; background: #f0f0f0;">
+        </div>
+
+        <button class="btn-fest-orange" id="btn-submit" type="button" onclick="submitForm()">立即注册</button>
+        <div class="toast-box" id="msg-box"></div>
+        <a href="index.html" style="text-align: center; font-size: 11px; font-weight: 800; color: #777; text-decoration: none;" id="link-home">‹ 返回主页 (Homepage)</a>
+      </div>
+    </div>
+
+    <!-- GM 专属控制面板 (已注册列表 / 翻页 / 封禁 / 删除 / 洗白) -->
+    <div id="gm-panel-section" class="gm-view" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 13px; font-weight: 900; color: var(--db-orange);">GM 控制管理中心</span>
+        <div>
+          <button onclick="loadGmDashboardData(currentAccountsPage)" type="button" style="background: none; border: none; color: #1358b3; font-weight: 800; font-size: 11px; cursor: pointer; margin-right: 8px;">[刷新]</button>
+          <button onclick="logoutGm()" type="button" style="background: none; border: none; color: #ff5400; font-weight: 800; font-size: 11px; cursor: pointer;">[登出]</button>
+        </div>
+      </div>
+
+      <!-- 统计指标 -->
+      <div class="gm-stats-box">
+        <div>全服注册: <b id="stat-acc" style="color: #000;">0</b></div>
+        <div>已封禁: <b id="stat-ban" style="color: #e64200;">0</b></div>
+      </div>
+
+      <!-- 已注册账号动态列表 -->
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 800; color: #555;">已注册账号清单 (点选填入):</span>
+        <span style="font-size: 10px; font-weight: 700; color: #888;" id="page-total-info">共 0 条</span>
+      </div>
+
+      <div class="acc-table-wrap">
+        <table class="acc-table">
+          <thead>
+            <tr>
+              <th>用户名</th>
+              <th>身份</th>
+              <th>状态</th>
+              <th>绑定设备</th>
+            </tr>
+          </thead>
+          <tbody id="acc-list-body">
+            <tr><td colspan="4" style="text-align:center; color:#999;">加载中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 分页控制器 -->
+      <div class="pagination-bar">
+        <span id="page-indicator">第 1 / 1 页</span>
+        <div class="page-btn-group">
+          <button class="btn-page" id="btn-page-prev" onclick="goToPage(currentAccountsPage - 1)">上一页</button>
+          <button class="btn-page" id="btn-page-next" onclick="goToPage(currentAccountsPage + 1)">下一页</button>
+        </div>
+      </div>
+
+      <!-- 操作面板 -->
+      <div class="form-col" style="gap: 8px;">
+        <div class="form-group">
+          <label>目标用户名</label>
+          <input type="text" id="target-user-input" class="fest-input" placeholder="输入或上方点击用户名...">
+        </div>
+        <div class="form-group">
+          <label>操作原因 / 备注</label>
+          <input type="text" id="target-reason-input" class="fest-input" value="违反服务器管理条例">
+        </div>
+
+        <div class="gm-btn-row">
+          <button class="btn-ban" type="button" onclick="handleGmAction('ban')">连带封禁账号+设备</button>
+          <button class="btn-unban" type="button" onclick="handleGmAction('unban')">全套洗白恢复</button>
+          <button class="btn-del" type="button" onclick="handleGmAction('delete')">彻底删除账号</button>
+        </div>
+        <div class="toast-box" id="gm-msg-box"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "https://dbo-account-api.hoipoi.workers.dev";
+
+    const safeStore = {
+      get(key) {
+        try { return localStorage.getItem(key); } catch (e) { return null; }
+      },
+      set(key, val) {
+        try { localStorage.setItem(key, val); } catch (e) {}
+      },
+      del(key) {
+        try { localStorage.removeItem(key); } catch (e) {}
+      }
+    };
+
+    let localDeviceId = safeStore.get('dbo_mock_dev_id');
+    let localPubKey = safeStore.get('dbo_mock_pubkey');
+
+    if (!localDeviceId) {
+      localDeviceId = 'dev_' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+      localPubKey = 'mock_pubkey_p256_' + localDeviceId;
+      safeStore.set('dbo_mock_dev_id', localDeviceId);
+      safeStore.set('dbo_mock_pubkey', localPubKey);
+    }
+
+    function renderDeviceId() {
+      const el = document.getElementById('device_id');
+      if (el) el.value = localDeviceId;
+    }
+
+    const i18n = {
+      "zh-CN": {
+        tab_reg: "注册新账号",
+        tab_log: "登录",
+        username: "用户名",
+        password: "密码",
+        acc_type: "身份类型",
+        type_player: "普通玩家",
+        type_gm: "管理员 (GM)",
+        gm_secret: "GM 一次性激活口令",
+        device: "设备安全指纹 (自动匹配)",
+        btn_reg: "立即注册",
+        btn_log: "登录",
+        loading: "处理中...",
+        empty_err: "请填写用户名和密码",
+        gm_key_err: "注册 GM 身份必须填写一次性口令",
+        reg_ok: "注册成功！账号 ID: {id} | 角色: {role}",
+        log_ok: "登录成功！欢迎回来 {user}，正在前往主页...",
+        back_home: "‹ 返回主页 (Homepage)"
+      },
+      "zh-TW": {
+        tab_reg: "註冊新帳號",
+        tab_log: "登入",
+        username: "使用者名稱",
+        password: "密碼",
+        acc_type: "身分類型",
+        type_player: "一般玩家",
+        type_gm: "管理員 (GM)",
+        gm_secret: "GM 一次性啟用口令",
+        device: "裝置安全指紋 (自動匹配)",
+        btn_reg: "立即註冊",
+        btn_log: "登入",
+        loading: "處理中...",
+        empty_err: "請填寫使用者名稱與密碼",
+        gm_key_err: "註冊 GM 身分必須填寫口令",
+        reg_ok: "註冊成功！帳號 ID: {id} | 角色: {role}",
+        log_ok: "登入成功！歡迎回來 {user}，即將前往首頁...",
+        back_home: "‹ 返回首頁 (Homepage)"
+      },
+      en: {
+        tab_reg: "Register",
+        tab_log: "Sign In",
+        username: "Username",
+        password: "Password",
+        acc_type: "Role Type",
+        type_player: "Player",
+        type_gm: "Admin (GM)",
+        gm_secret: "GM One-time Code",
+        device: "Device Signature (Auto)",
+        btn_reg: "Register Now",
+        btn_log: "Sign In",
+        loading: "Processing...",
+        empty_err: "Please enter username and password.",
+        gm_key_err: "GM Code is required.",
+        reg_ok: "Registered! ID: {id} | Role: {role}",
+        log_ok: "Welcome back, {user}! Redirecting...",
+        back_home: "‹ Back to Homepage"
+      },
+      es: {
+        tab_reg: "Registrar",
+        tab_log: "Iniciar Sesión",
+        username: "Usuario",
+        password: "Contraseña",
+        acc_type: "Tipo de Perfil",
+        type_player: "Jugador",
+        type_gm: "Admin (GM)",
+        gm_secret: "Código GM (Uso único)",
+        device: "Firma del Dispositivo",
+        btn_reg: "Registrar Ahora",
+        btn_log: "Iniciar Sesión",
+        loading: "Cargando...",
+        empty_err: "Complete usuario y contraseña.",
+        gm_key_err: "Se requiere código GM.",
+        reg_ok: "¡Registrado! ID: {id} | Rol: {role}",
+        log_ok: "¡Bienvenido {user}! Redirigiendo...",
+        back_home: "‹ Volver a Inicio"
+      },
+      pt: {
+        tab_reg: "Criar Conta",
+        tab_log: "Entrar",
+        username: "Usuário",
+        password: "Senha",
+        acc_type: "Tipo de Perfil",
+        type_player: "Jogador",
+        type_gm: "Admin (GM)",
+        gm_secret: "Código GM (Uso único)",
+        device: "Assinatura do Dispositivo",
+        btn_reg: "Criar Conta",
+        btn_log: "Entrar",
+        loading: "Processando...",
+        empty_err: "Preencha usuário e senha.",
+        gm_key_err: "Código GM obrigatório.",
+        reg_ok: "Sucesso! ID: {id} | Perfil: {role}",
+        log_ok: "Bem-vindo {user}! Redirecionando...",
+        back_home: "‹ Voltar ao Início"
+      },
+      ja: {
+        tab_reg: "新規登録",
+        tab_log: "ログイン",
+        username: "ユーザー名",
+        password: "パスワード",
+        acc_type: "権限",
+        type_player: "一般プレイヤー",
+        type_gm: "管理者 (GM)",
+        gm_secret: "GM使い捨てコード",
+        device: "端末識別子 (自動取得)",
+        btn_reg: "今すぐ登録",
+        btn_log: "ログイン",
+        loading: "処理中...",
+        empty_err: "ユーザー名とパスワードを入力してください。",
+        gm_key_err: "GM登録には専用コードが必要です。",
+        reg_ok: "登録完了！ ID: {id} | 権限: {role}",
+        log_ok: "ログイン成功！ おかえりなさい {user}",
+        back_home: "‹ ホームに戻る"
+      }
+    };
+
+    let currentTab = 'register';
+    let currentAccountsPage = 1;
+    let totalAccountsPages = 1;
+
+    function detectUserLanguage() {
+      const savedLang = safeStore.get('dbo_user_lang');
+      if (savedLang && i18n[savedLang]) return savedLang;
+
+      let navLang = 'en';
+      try { navLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase(); } catch (e) {}
+
+      if (navLang.includes('tw') || navLang.includes('hk') || navLang.includes('mo') || navLang.includes('hant')) return 'zh-TW';
+      if (navLang.startsWith('zh')) return 'zh-CN';
+      if (navLang.startsWith('es')) return 'es';
+      if (navLang.startsWith('pt')) return 'pt';
+      if (navLang.startsWith('ja')) return 'ja';
+      return 'en';
+    }
+
+    let currentLang = detectUserLanguage();
+
+    function changeLanguage(lang, isManual = false) {
+      currentLang = lang;
+      if (isManual) safeStore.set('dbo_user_lang', lang);
+
+      const selectElem = document.getElementById('lang-switch');
+      if (selectElem) selectElem.value = lang;
+
+      const dict = i18n[lang] || i18n['en'];
+      
+      const tabRegBtn = document.getElementById('tab-reg-btn');
+      const tabLogBtn = document.getElementById('tab-log-btn');
+      const lblUser = document.getElementById('lbl-username');
+      const lblPass = document.getElementById('lbl-password');
+      const lblType = document.getElementById('lbl-type');
+      const lblTypePlayer = document.getElementById('lbl-type-player');
+      const lblTypeGm = document.getElementById('lbl-type-gm');
+      const lblGmSecret = document.getElementById('lbl-gm-secret');
+      const lblDevice = document.getElementById('lbl-device');
+      const btnSubmit = document.getElementById('btn-submit');
+      const linkHome = document.getElementById('link-home');
+
+      if (tabRegBtn) tabRegBtn.innerText = dict.tab_reg;
+      if (tabLogBtn) tabLogBtn.innerText = dict.tab_log;
+      if (lblUser) lblUser.innerText = dict.username;
+      if (lblPass) lblPass.innerText = dict.password;
+      if (lblType) lblType.innerText = dict.acc_type;
+      if (lblTypePlayer) lblTypePlayer.innerText = dict.type_player;
+      if (lblTypeGm) lblTypeGm.innerText = dict.type_gm;
+      if (lblGmSecret) lblGmSecret.innerText = dict.gm_secret;
+      if (lblDevice) lblDevice.innerText = dict.device;
+      if (linkHome) linkHome.innerText = dict.back_home;
+      if (btnSubmit) btnSubmit.innerText = currentTab === 'register' ? dict.btn_reg : dict.btn_log;
+    }
+
+    function toggleGmKeyField(show) {
+      const row = document.getElementById('row-gm-secret');
+      if (row) row.style.display = (show && currentTab === 'register') ? 'flex' : 'none';
+    }
+
+    function switchTab(mode) {
+      currentTab = mode;
+      const dict = i18n[currentLang] || i18n['en'];
+      document.getElementById('tab-reg-btn').classList.toggle('active', mode === 'register');
+      document.getElementById('tab-log-btn').classList.toggle('active', mode === 'login');
+      document.getElementById('row-account-type').style.display = mode === 'register' ? 'flex' : 'none';
+      
+      const isGmChecked = document.querySelector('input[name="acc_type"]:checked')?.value === 'GM';
+      document.getElementById('row-gm-secret').style.display = (mode === 'register' && isGmChecked) ? 'flex' : 'none';
+      document.getElementById('btn-submit').innerText = mode === 'register' ? dict.btn_reg : dict.btn_log;
+      hideMsg();
+    }
+
+    function showMsg(text, isError) {
+      const box = document.getElementById('msg-box');
+      box.className = 'toast-box ' + (isError ? 'error' : 'success');
+      box.innerText = text;
+      box.style.display = 'block';
+    }
+
+    function hideMsg() {
+      const box = document.getElementById('msg-box');
+      box.style.display = 'none';
+    }
+
+    async function submitForm() {
+      const dict = i18n[currentLang] || i18n['en'];
+      const btn = document.getElementById('btn-submit');
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const checkedRadio = document.querySelector('input[name="acc_type"]:checked');
+      const account_type = checkedRadio ? checkedRadio.value : 'PLAYER';
+      const gm_secret = document.getElementById('gm_secret').value.trim();
+
+      if (!username || !password) {
+        showMsg(dict.empty_err, true);
+        return;
+      }
+
+      if (currentTab === 'register' && account_type === 'GM' && !gm_secret) {
+        showMsg(dict.gm_key_err, true);
+        return;
+      }
+
+      hideMsg();
+      btn.disabled = true;
+      btn.innerText = dict.loading;
+
+      try {
+        if (currentTab === 'register') {
+          const res = await fetch(`${API_BASE}/api/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username,
+              password,
+              device_id: localDeviceId,
+              public_key: localPubKey,
+              account_type,
+              gm_secret
+            })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "注册失败");
+
+          const msg = dict.reg_ok.replace('{id}', data.account_id.slice(0, 8)).replace('{role}', data.account_type);
+          showMsg(msg, false);
+        } else {
+          // 【登录请求带上 public_key，保障新设备底册健全】
+          const res = await fetch(`${API_BASE}/api/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username,
+              password,
+              device_id: localDeviceId,
+              public_key: localPubKey
+            })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "登录失败");
+
+          safeStore.set('dbo_token', data.session_token);
+          safeStore.set('dbo_user', data.username);
+          safeStore.set('dbo_role', data.account_type);
+
+          if (data.account_type === 'GM') {
+            enterGmDashboard();
+            return;
+          }
+
+          const msg = dict.log_ok.replace('{user}', data.username);
+          showMsg(msg, false);
+
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1200);
+        }
+      } catch (err) {
+        showMsg(err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = currentTab === 'register' ? dict.btn_reg : dict.btn_log;
+      }
+    }
+
+    // ==========================================
+    // GM 专属控制中心业务逻辑
+    // ==========================================
+    function enterGmDashboard() {
+      document.getElementById('auth-section').style.display = 'none';
+      document.getElementById('gm-panel-section').style.display = 'flex';
+      loadGmDashboardData(1);
+    }
+
+    function logoutGm() {
+      safeStore.del('dbo_token');
+      safeStore.del('dbo_user');
+      safeStore.del('dbo_role');
+      document.getElementById('auth-section').style.display = 'block';
+      document.getElementById('gm-panel-section').style.display = 'none';
+      hideMsg();
+    }
+
+    function goToPage(targetPage) {
+      if (targetPage < 1 || targetPage > totalAccountsPages) return;
+      loadGmDashboardData(targetPage);
+    }
+
+    async function loadGmDashboardData(page = 1) {
+      const token = safeStore.get('dbo_token');
+      if (!token) return;
+
+      currentAccountsPage = page;
+
+      try {
+        const resStats = await fetch(`${API_BASE}/api/gm/stats`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_token: token })
+        });
+        const dataStats = await resStats.json();
+        if (resStats.ok) {
+          document.getElementById('stat-acc').innerText = dataStats.total_accounts;
+          document.getElementById('stat-ban').innerText = dataStats.total_banned;
+        } else if (resStats.status === 403) {
+          logoutGm();
+          return;
+        }
+      } catch (e) {}
+
+      try {
+        const resList = await fetch(`${API_BASE}/api/gm/list-accounts`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            session_token: token,
+            page: currentAccountsPage,
+            page_size: 10
+          })
+        });
+        const dataList = await resList.json();
+        const tbody = document.getElementById('acc-list-body');
+        
+        if (resList.ok && dataList.accounts) {
+          totalAccountsPages = dataList.total_pages || 1;
+          document.getElementById('page-indicator').innerText = `第 ${dataList.page} / ${totalAccountsPages} 页`;
+          document.getElementById('page-total-info').innerText = `共 ${dataList.total_count} 条`;
+          
+          document.getElementById('btn-page-prev').disabled = (dataList.page <= 1);
+          document.getElementById('btn-page-next').disabled = (dataList.page >= totalAccountsPages);
+
+          if (dataList.accounts.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#999;">暂无数据</td></tr>';
+            return;
+          }
+
+          let rows = '';
+          dataList.accounts.forEach(acc => {
+            const isBan = acc.status === 'BANNED';
+            const statusBadge = isBan 
+              ? `<span class="badge-banned">已封禁</span>` 
+              : `<span class="badge-active">正常</span>`;
+            const roleColor = acc.account_type === 'GM' ? 'color:#ff5400; font-weight:900;' : 'color:#555;';
+
+            rows += `
+              <tr style="cursor: pointer;" onclick="document.getElementById('target-user-input').value='${acc.username}'" title="点击填入用户名">
+                <td style="font-weight:900; color:#111;">${acc.username}</td>
+                <td style="${roleColor}">${acc.account_type}</td>
+                <td>${statusBadge}</td>
+                <td>${acc.device_count} 台</td>
+              </tr>
+            `;
+          });
+          tbody.innerHTML = rows;
+        }
+      } catch (e) {}
+    }
+
+    async function handleGmAction(actionType) {
+      const token = safeStore.get('dbo_token');
+      const targetUser = document.getElementById('target-user-input').value.trim();
+      const reason = document.getElementById('target-reason-input').value.trim();
+      const msgBox = document.getElementById('gm-msg-box');
+
+      if (!targetUser) {
+        msgBox.className = 'toast-box error';
+        msgBox.innerText = '请先输入或从上方列表点击选择目标用户名！';
+        msgBox.style.display = 'block';
+        return;
+      }
+
+      let endpoint = '';
+      let confirmText = '';
+      if (actionType === 'ban') {
+        endpoint = '/api/gm/ban-chain';
+        confirmText = `确定要连带拉黑玩家 [${targetUser}] 及其绑定的全部物理设备吗？`;
+      } else if (actionType === 'unban') {
+        endpoint = '/api/gm/unban-account';
+        confirmText = `确定要洗白玩家 [${targetUser}] 并解封其名下所有设备吗？`;
+      } else if (actionType === 'delete') {
+        endpoint = '/api/gm/delete-account';
+        confirmText = `【警告】确定要物理彻底删除玩家 [${targetUser}] 吗？此操作无法恢复！`;
+      }
+
+      if (!confirm(confirmText)) return;
+
+      try {
+        const res = await fetch(`${API_BASE}${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            target_username: targetUser,
+            session_token: token,
+            ban_reason: reason
+          })
+        });
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || "操作失败");
+
+        msgBox.className = 'toast-box success';
+        msgBox.innerText = data.message;
+        msgBox.style.display = 'block';
+        loadGmDashboardData(currentAccountsPage);
+      } catch (err) {
+        msgBox.className = 'toast-box error';
+        msgBox.innerText = err.message;
+        msgBox.style.display = 'block';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderDeviceId();
+      changeLanguage(currentLang, false);
+      
+      if (safeStore.get('dbo_role') === 'GM' && safeStore.get('dbo_token')) {
+        enterGmDashboard();
+      }
+    });
+  </script>
+</body>
+</html>
